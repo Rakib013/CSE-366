@@ -71,9 +71,12 @@ def main():
                 pygame.draw.rect(screen, (200, 200, 200), rect, 1)  # Draw grid lines
 
         # Draw barriers
+        bomb_image = pygame.image.load("bomb.png")  
+        bomb_image = pygame.transform.scale(bomb_image, (GRID_SIZE, GRID_SIZE))  
+
         for (bx, by) in environment.barrier_locations:
-            barrier_rect = pygame.Rect(bx * GRID_SIZE, by * GRID_SIZE, GRID_SIZE, GRID_SIZE)
-            pygame.draw.rect(screen, BARRIER_COLOR, barrier_rect)
+            screen.blit(bomb_image, (bx * GRID_SIZE, by * GRID_SIZE))
+
 
         # Draw tasks with numbers
         for (tx, ty), task_number in environment.task_locations.items():

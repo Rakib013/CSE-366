@@ -4,27 +4,27 @@ import pygame
 class Agent(pygame.sprite.Sprite):
     def __init__(self, environment, grid_size):
         super().__init__()
-        self.image = pygame.Surface((grid_size, grid_size))
-        self.image.fill((0, 255, 0)) 
-        self.rect = self.image.get_rect()
         self.grid_size = grid_size
         self.environment = environment
         self.position = [0, 0]  
-        self.rect.topleft = (0, 0)
         self.task_completed = 0
         self.completed_tasks = []
         self.path = []  
-        self.moving = False
+        self.moving = False  
+
+        self.image = pygame.image.load("car.png")  
+        self.image = pygame.transform.scale(self.image, (grid_size, grid_size))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (0, 0) 
 
     def move(self):
-        """Move the agent along the path."""
         if self.path:
             next_position = self.path.pop(0)
             self.position = list(next_position)
             self.rect.topleft = (self.position[0] * self.grid_size, self.position[1] * self.grid_size)
             self.check_task_completion()
         else:
-            self.moving = False 
+            self.moving = False  
 
     def check_task_completion(self):
         position_tuple = tuple(self.position)
@@ -43,11 +43,11 @@ class Agent(pygame.sprite.Sprite):
                     shortest_path = path
                     nearest_task = task_position
         if shortest_path:
-            self.path = shortest_path[1:]  # Exclude the current position
+            self.path = shortest_path[1:] 
             self.moving = True
 
     def idastar_search(self, goal):
-        def search(path, g_cost, bound):
+        def dfs(path, g_cost, bound):
             node = path[-1]
             f_cost = g_cost + self.heuristic(node, goal)
             if f_cost > bound:
@@ -60,7 +60,7 @@ class Agent(pygame.sprite.Sprite):
                 if neighbor not in path:
                     new_g_cost = g_cost + 1
                     new_path = path + [neighbor]
-                    t, result = search(new_path, new_g_cost, bound)
+                    t, result = dfs(new_path, new_g_cost, bound)
                     if result:
                         return t, result
                     min_threshold = min(min_threshold, t)
@@ -71,7 +71,7 @@ class Agent(pygame.sprite.Sprite):
         path = [start]
         
         while True:
-            t, result = search(path, 0, bound)
+            t, result = dfs(path, 0, bound)
             if result:
                 return result
             if t == float("inf"):

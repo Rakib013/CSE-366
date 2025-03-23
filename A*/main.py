@@ -9,13 +9,13 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 800, 600
 GRID_SIZE = 40
 STATUS_WIDTH = 200
 BACKGROUND_COLOR = (255, 255, 255)
-BARRIER_COLOR = (0, 0, 0)       # Barrier color is black
-TASK_COLOR = (255, 0, 0)        # Task color is red
+BARRIER_COLOR = (0, 0, 0)       
+TASK_COLOR = (255, 0, 0)        
 TEXT_COLOR = (0, 0, 0)
 BUTTON_COLOR = (0, 200, 0)
 BUTTON_HOVER_COLOR = (0, 255, 0)
 BUTTON_TEXT_COLOR = (255, 255, 255)
-MOVEMENT_DELAY = 200  # Milliseconds between movements
+MOVEMENT_DELAY = 200  
 
 def main():
     pygame.init()
@@ -49,7 +49,6 @@ def main():
     while running:
         clock.tick(60)  # Limit to 60 FPS
 
-        # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -70,12 +69,12 @@ def main():
                 rect = pygame.Rect(x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
                 pygame.draw.rect(screen, (200, 200, 200), rect, 1)  # Draw grid lines
 
-        # Draw barriers
-        for (bx, by) in environment.barrier_locations:
-            barrier_rect = pygame.Rect(bx * GRID_SIZE, by * GRID_SIZE, GRID_SIZE, GRID_SIZE)
-            pygame.draw.rect(screen, BARRIER_COLOR, barrier_rect)
+        bomb_image = pygame.image.load("bomb-i.png")  
+        bomb_image = pygame.transform.scale(bomb_image, (GRID_SIZE, GRID_SIZE))  
 
-        # Draw tasks with numbers
+        for (bx, by) in environment.barrier_locations:
+            screen.blit(bomb_image, (bx * GRID_SIZE, by * GRID_SIZE))
+
         for (tx, ty), task_number in environment.task_locations.items():
             task_rect = pygame.Rect(tx * GRID_SIZE, ty * GRID_SIZE, GRID_SIZE, GRID_SIZE)
             pygame.draw.rect(screen, TASK_COLOR, task_rect)
@@ -125,10 +124,8 @@ def main():
         # Draw the status panel separator
         pygame.draw.line(screen, (0, 0, 0), (WINDOW_WIDTH, 0), (WINDOW_WIDTH, WINDOW_HEIGHT))
 
-        # Update the display
         pygame.display.flip()
 
-    # Quit Pygame properly
     pygame.quit()
     sys.exit()
 

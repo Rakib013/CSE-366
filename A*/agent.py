@@ -6,17 +6,18 @@ from collections import deque
 class Agent(pygame.sprite.Sprite):
     def __init__(self, environment, grid_size):
         super().__init__()
-        self.image = pygame.Surface((grid_size, grid_size))
-        self.image.fill((0, 0, 255)) 
-        self.rect = self.image.get_rect()
         self.grid_size = grid_size
         self.environment = environment
-        self.position = [0, 0] 
-        self.rect.topleft = (0, 0)
+        self.position = [0, 0]  
         self.task_completed = 0
         self.completed_tasks = []
-        self.path = [] 
+        self.path = []  
         self.moving = False  
+
+        self.image = pygame.image.load("car-i.png")
+        self.image = pygame.transform.scale(self.image, (grid_size, grid_size))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (0, 0) 
 
     def move(self):
         if self.path:
