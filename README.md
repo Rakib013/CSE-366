@@ -5,7 +5,7 @@ This repository contains implementations of various algorithms, starting with pa
 
 ## Directory Structure
 ```
-/algorithms-repo
+/CSE-366
 │── A*
 │   ├── agent.py          # Implementation of the A* agent
 │   ├── environment.py    # Defines the grid-based environment
