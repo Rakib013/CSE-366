@@ -7,29 +7,27 @@ class Agent(pygame.sprite.Sprite):
     def __init__(self, environment, grid_size):
         super().__init__()
         self.image = pygame.Surface((grid_size, grid_size))
-        self.image.fill((0, 0, 255))  # Agent color is blue
+        self.image.fill((0, 0, 255)) 
         self.rect = self.image.get_rect()
         self.grid_size = grid_size
         self.environment = environment
-        self.position = [0, 0]  # Starting at the top-left corner of the grid
+        self.position = [0, 0] 
         self.rect.topleft = (0, 0)
         self.task_completed = 0
         self.completed_tasks = []
-        self.path = []  # List of positions to follow
-        self.moving = False  # Flag to indicate if the agent is moving
+        self.path = [] 
+        self.moving = False  
 
     def move(self):
-        """Move the agent along the path."""
         if self.path:
             next_position = self.path.pop(0)
             self.position = list(next_position)
             self.rect.topleft = (self.position[0] * self.grid_size, self.position[1] * self.grid_size)
             self.check_task_completion()
         else:
-            self.moving = False  # Stop moving when path is exhausted
+            self.moving = False  
 
     def check_task_completion(self):
-        """Check if the agent has reached a task location."""
         position_tuple = tuple(self.position)
         if position_tuple in self.environment.task_locations:
             task_number = self.environment.task_locations.pop(position_tuple)
@@ -37,7 +35,6 @@ class Agent(pygame.sprite.Sprite):
             self.completed_tasks.append(task_number)
 
     def astar_search(self, start, goal, get_neighbors, heuristic):
-        """A* pathfinding algorithm."""
         open_set = []
         heapq.heappush(open_set, (0, [start]))
         g_costs = {start: 0}
@@ -58,7 +55,6 @@ class Agent(pygame.sprite.Sprite):
         return None
 
     def find_nearest_task(self):
-        """Find the nearest task using A* algorithm."""
         nearest_task = None
         shortest_path = None
         for task_position in self.environment.task_locations.keys():
@@ -72,11 +68,9 @@ class Agent(pygame.sprite.Sprite):
             self.moving = True
 
     def heuristic(self, pos, goal):
-        """Manhattan distance heuristic."""
         return abs(pos[0] - goal[0]) + abs(pos[1] - goal[1])
 
     def get_neighbors(self, x, y):
-        """Get walkable neighboring positions."""
         neighbors = []
         directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
         for dx, dy in directions:

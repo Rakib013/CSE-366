@@ -5,16 +5,16 @@ class Agent(pygame.sprite.Sprite):
     def __init__(self, environment, grid_size):
         super().__init__()
         self.image = pygame.Surface((grid_size, grid_size))
-        self.image.fill((0, 255, 0))  # Agent color is green
+        self.image.fill((0, 255, 0)) 
         self.rect = self.image.get_rect()
         self.grid_size = grid_size
         self.environment = environment
-        self.position = [0, 0]  # Starting at the top-left corner of the grid
+        self.position = [0, 0]  
         self.rect.topleft = (0, 0)
         self.task_completed = 0
         self.completed_tasks = []
-        self.path = []  # List of positions to follow
-        self.moving = False  # Flag to indicate if the agent is moving
+        self.path = []  
+        self.moving = False
 
     def move(self):
         """Move the agent along the path."""
@@ -24,10 +24,9 @@ class Agent(pygame.sprite.Sprite):
             self.rect.topleft = (self.position[0] * self.grid_size, self.position[1] * self.grid_size)
             self.check_task_completion()
         else:
-            self.moving = False  # Stop moving when path is exhausted
+            self.moving = False 
 
     def check_task_completion(self):
-        """Check if the agent has reached a task location."""
         position_tuple = tuple(self.position)
         if position_tuple in self.environment.task_locations:
             task_number = self.environment.task_locations.pop(position_tuple)
@@ -35,7 +34,6 @@ class Agent(pygame.sprite.Sprite):
             self.completed_tasks.append(task_number)
 
     def find_nearest_task(self):
-        """Find the nearest task using IDA* algorithm."""
         nearest_task = None
         shortest_path = None
         for task_position in self.environment.task_locations.keys():
@@ -49,7 +47,6 @@ class Agent(pygame.sprite.Sprite):
             self.moving = True
 
     def idastar_search(self, goal):
-        """Iterative Deepening A* (IDA*) search algorithm."""
         def search(path, g_cost, bound):
             node = path[-1]
             f_cost = g_cost + self.heuristic(node, goal)
@@ -82,11 +79,9 @@ class Agent(pygame.sprite.Sprite):
             bound = t
 
     def heuristic(self, pos, goal):
-        """Manhattan distance heuristic."""
         return abs(pos[0] - goal[0]) + abs(pos[1] - goal[1])
 
     def get_neighbors(self, x, y):
-        """Get walkable neighboring positions."""
         neighbors = []
         directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
         for dx, dy in directions:
